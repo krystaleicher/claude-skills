@@ -2,3 +2,4 @@
 .playwright-mcp/
 .superpowers/
 course-skills - Commands/
+node_modules/
