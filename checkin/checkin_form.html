@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weekly Check-In</title>
+  <style>
+    body { font-family: Arial; background: #f0f0f0; }
+    .form-wrap { background: white; padding: 15px; width: 480px; }
+    h2 { color: #888; font-size: 13px; }
+    .field { margin: 8px 0; }
+    input[type=text], textarea { width: 100%; padding: 4px; font-size: 11px; }
+    .mood-row { display: flex; gap: 3px; }
+    .mood-btn { background: #eee; border: none; padding: 4px 8px; cursor: pointer; }
+    .mood-btn.selected { background: #4a90e2; color: #fff; }
+    button[type=submit] { background: #4a90e2; color: white; border: none; padding: 6px 12px; margin-top: 8px; cursor: pointer; font-size: 11px; }
+    .hint { color: #aaa; font-size: 9px; }
+  </style>
+</head>
+<body>
+  <div class="form-wrap">
+    <h2>WEEKLY CHECK-IN</h2>
+
+    <div class="field">
+      How are you feeling this week?
+      <div class="mood-row">
+        <button class="mood-btn" onclick="selectMood(1)">1</button>
+        <button class="mood-btn" onclick="selectMood(2)">2</button>
+        <button class="mood-btn" onclick="selectMood(3)">3</button>
+        <button class="mood-btn" onclick="selectMood(4)">4</button>
+        <button class="mood-btn" onclick="selectMood(5)">5</button>
+      </div>
+    </div>
+
+    <div class="field">
+      Top win
+      <input type="text" id="top_win" placeholder="What went well?">
+      <div class="hint">max 500 chars</div>
+    </div>
+
+    <div class="field">
+      Biggest challenge
+      <textarea id="biggest_challenge" rows="2" placeholder="What was hard?"></textarea>
+    </div>
+
+    <div class="field">
+      Next week's commitment
+      <input type="text" id="commitment" placeholder="I will...">
+    </div>
+
+    <button type="submit" onclick="submitForm()">Submit</button>
+  </div>
+
+  <script>
+    let selectedMood = null;
+    function selectMood(val) {
+      selectedMood = val;
+      document.querySelectorAll('.mood-btn').forEach((b, i) => {
+        b.classList.toggle('selected', i + 1 === val);
+      });
+    }
+    function submitForm() {
+      const data = {
+        mood: selectedMood,
+        top_win: document.getElementById('top_win').value,
+        biggest_challenge: document.getElementById('biggest_challenge').value,
+        commitment: document.getElementById('commitment').value,
+      };
+      console.log('submitting', data);
+    }
+  </script>
+</body>
+</html>
