@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Weekly Check-In</title>
   <style>
     body { font-family: Arial; background: #f0f0f0; }
@@ -12,41 +14,45 @@
     .mood-btn { background: #eee; border: none; padding: 4px 8px; cursor: pointer; }
     .mood-btn.selected { background: #4a90e2; color: #fff; }
     button[type=submit] { background: #4a90e2; color: white; border: none; padding: 6px 12px; margin-top: 8px; cursor: pointer; font-size: 11px; }
-    .hint { color: #aaa; font-size: 9px; }
+    .hint { color: #767676; font-size: 9px; }
+    fieldset { border: none; padding: 0; margin: 8px 0; }
+    legend { font-family: Arial; font-size: inherit; padding: 0; margin-bottom: 4px; }
   </style>
 </head>
 <body>
   <div class="form-wrap">
     <h2>WEEKLY CHECK-IN</h2>
 
-    <div class="field">
-      How are you feeling this week?
-      <div class="mood-row">
-        <button class="mood-btn" onclick="selectMood(1)">1</button>
-        <button class="mood-btn" onclick="selectMood(2)">2</button>
-        <button class="mood-btn" onclick="selectMood(3)">3</button>
-        <button class="mood-btn" onclick="selectMood(4)">4</button>
-        <button class="mood-btn" onclick="selectMood(5)">5</button>
+    <form id="checkin-form">
+      <fieldset>
+        <legend>How are you feeling this week?</legend>
+        <div class="mood-row">
+          <button type="button" class="mood-btn" aria-label="Mood 1 – Very low" aria-pressed="false" onclick="selectMood(1)">1</button>
+          <button type="button" class="mood-btn" aria-label="Mood 2 – Low" aria-pressed="false" onclick="selectMood(2)">2</button>
+          <button type="button" class="mood-btn" aria-label="Mood 3 – Neutral" aria-pressed="false" onclick="selectMood(3)">3</button>
+          <button type="button" class="mood-btn" aria-label="Mood 4 – Good" aria-pressed="false" onclick="selectMood(4)">4</button>
+          <button type="button" class="mood-btn" aria-label="Mood 5 – Very high" aria-pressed="false" onclick="selectMood(5)">5</button>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label for="top_win">Top win</label>
+        <input type="text" id="top_win" placeholder="What went well?" aria-describedby="top-win-hint">
+        <div class="hint" id="top-win-hint">max 500 chars</div>
       </div>
-    </div>
 
-    <div class="field">
-      Top win
-      <input type="text" id="top_win" placeholder="What went well?">
-      <div class="hint">max 500 chars</div>
-    </div>
+      <div class="field">
+        <label for="biggest_challenge">Biggest challenge</label>
+        <textarea id="biggest_challenge" rows="2" placeholder="What was hard?"></textarea>
+      </div>
 
-    <div class="field">
-      Biggest challenge
-      <textarea id="biggest_challenge" rows="2" placeholder="What was hard?"></textarea>
-    </div>
+      <div class="field">
+        <label for="commitment">Next week's commitment</label>
+        <input type="text" id="commitment" placeholder="I will...">
+      </div>
 
-    <div class="field">
-      Next week's commitment
-      <input type="text" id="commitment" placeholder="I will...">
-    </div>
-
-    <button type="submit" onclick="submitForm()">Submit</button>
+      <button type="submit" onclick="submitForm()">Submit</button>
+    </form>
   </div>
 
   <script>
@@ -54,7 +60,9 @@
     function selectMood(val) {
       selectedMood = val;
       document.querySelectorAll('.mood-btn').forEach((b, i) => {
-        b.classList.toggle('selected', i + 1 === val);
+        const selected = i + 1 === val;
+        b.classList.toggle('selected', selected);
+        b.setAttribute('aria-pressed', selected ? 'true' : 'false');
       });
     }
     function submitForm() {
