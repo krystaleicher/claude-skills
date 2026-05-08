@@ -126,3 +126,39 @@ class TestBuildCheckin:
     def test_mood_stored_as_int(self):
         result = build_checkin(VALID_DATA)
         assert isinstance(result.mood, int)
+
+    def test_biggest_challenge_is_stripped(self):
+        data = {**VALID_DATA, "biggest_challenge": "  too many meetings  "}
+        result = build_checkin(data)
+        assert result.biggest_challenge == "too many meetings"
+
+
+# --- Additional validate_checkin tests ---
+
+class TestValidateCheckinAdditional:
+
+    def test_mood_negative_one_is_invalid(self):
+        ok, err = validate_checkin({**VALID_DATA, "mood": -1})
+        assert ok is False
+        assert "1 and 5" in err
+
+    def test_biggest_challenge_over_max_length_error_message(self):
+        ok, err = validate_checkin({**VALID_DATA, "biggest_challenge": "b" * (MAX_TEXT_LENGTH + 1)})
+        assert ok is False
+        assert "Biggest Challenge" in err
+        assert str(MAX_TEXT_LENGTH) in err
+
+
+# --- CheckIn dataclass equality ---
+
+class TestCheckInEquality:
+
+    def test_two_checkins_with_same_values_are_equal(self):
+        a = CheckIn(mood=3, top_win="Won", biggest_challenge="Focus", commitment="Keep going")
+        b = CheckIn(mood=3, top_win="Won", biggest_challenge="Focus", commitment="Keep going")
+        assert a == b
+
+    def test_two_checkins_with_different_mood_are_not_equal(self):
+        a = CheckIn(mood=3, top_win="Won", biggest_challenge="Focus", commitment="Keep going")
+        b = CheckIn(mood=4, top_win="Won", biggest_challenge="Focus", commitment="Keep going")
+        assert a != b
